@@ -29,7 +29,7 @@ public class Predictions extends AppCompatActivity {
     BitmapDrawable bitmapDrawable;
     Bitmap bitmap;
     String imageString;
-    int imageSize=128;
+    int imageSize=150;
     @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +41,18 @@ public class Predictions extends AppCompatActivity {
         Uri imageUri = getIntent().getParcelableExtra("image");
         try {
             Bitmap originalImage = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-            // Resize the image to match the model's input size (128x128)
-            Bitmap resizedImage = Bitmap.createScaledBitmap(originalImage, 128, 128, true);
+
+            // Maintain aspect ratio while resizing
+            int targetSize = 150;
+            int originalWidth = originalImage.getWidth();
+            int originalHeight = originalImage.getHeight();
+            float scaleFactor = Math.min(
+                    (float) targetSize / originalWidth,
+                    (float) targetSize / originalHeight
+            );
+            int newWidth = Math.round(originalWidth * scaleFactor);
+            int newHeight = Math.round(originalHeight * scaleFactor);
+            Bitmap resizedImage = Bitmap.createScaledBitmap(originalImage, newWidth, newHeight, true);
 
             classifyImage(resizedImage);
         } catch (IOException e) {
@@ -66,21 +76,17 @@ public class Predictions extends AppCompatActivity {
             Model model = Model.newInstance(getApplicationContext());
 
             // Creates inputs for reference.
-            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 128, 128, 3}, DataType.FLOAT32);
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 150, 150, 3}, DataType.FLOAT32);
+            int[] intValues = new int[imageSize * imageSize];
+            image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
+
             ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
             byteBuffer.order(ByteOrder.nativeOrder());
 
-            int[] intValues = new int[imageSize * imageSize];
-            image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
-            int pixel = 0;
-            //iterate over each pixel and extract R, G, and B values. Add those values individually to the byte buffer.
-            for(int i = 0; i < imageSize; i ++){
-                for(int j = 0; j < imageSize; j++){
-                    int val = intValues[pixel++]; // RGB
-                    byteBuffer.putFloat(((val >> 16) & 0xFF) * (1.f / 1));
-                    byteBuffer.putFloat(((val >> 8) & 0xFF) * (1.f / 1));
-                    byteBuffer.putFloat((val & 0xFF) * (1.f / 1));
-                }
+            for (int pixelValue : intValues) {
+                byteBuffer.putFloat(((pixelValue >> 16) & 0xFF) * (1.f / 255));
+                byteBuffer.putFloat(((pixelValue >> 8) & 0xFF) * (1.f / 255));
+                byteBuffer.putFloat((pixelValue & 0xFF) * (1.f / 255));
             }
 
             inputFeature0.loadBuffer(byteBuffer);
@@ -90,12 +96,12 @@ public class Predictions extends AppCompatActivity {
             float confidence = outputFeature0.getFloatValue(0);  // Assuming it's a single value for binary classification
             String[] classes = {"Negative", "Positive"};  // Replace with your binary class names
             String predictedClass;
-            if (confidence > 0.5) {
+            if (confidence > 0.399) {
                 predictedClass = classes[1];  // Positive class
             } else {
                 predictedClass = classes[0];  // Negative class
             }
-            result.setText("this is "+predictedClass);
+            result.setText("This image is classified as Pneumonia "+predictedClass);
 
             // Releases model resources if no longer used.
             model.close();

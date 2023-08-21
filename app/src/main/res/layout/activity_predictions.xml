@@ -21,11 +21,13 @@
         android:id="@+id/results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_gravity="center"
         android:textSize="20dp"
         android:text="TextView"
+        android:padding="25dp"
         tools:layout_editor_absoluteX="162dp"
         tools:layout_editor_absoluteY="341dp" />
+
 
     <ImageView
         android:id="@+id/xaiimg"
