@@ -1,6 +1,6 @@
 # Pneumonia Detection Android App
 
-![App Screenshot](start.jpg)(predition.jpg)
+![App Screenshot](start.jpg)(prediction.jpg)
 
 This Android app utilizes state-of-the-art deep learning technology to detect pneumonia from X-ray images. With an impressive accuracy rate of 96% and an AUC of 98%, this app provides a reliable and efficient tool for assisting medical professionals in diagnosing pneumonia.
 
