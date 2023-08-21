@@ -1,6 +1,6 @@
 # Pneumonia Detection Android App
 
-![App Screenshot](screenshot.png)
+![App Screenshot](start.jpg)(predition.jpg)
 
 This Android app utilizes state-of-the-art deep learning technology to detect pneumonia from X-ray images. With an impressive accuracy rate of 96% and an AUC of 98%, this app provides a reliable and efficient tool for assisting medical professionals in diagnosing pneumonia.
 
@@ -19,6 +19,7 @@ This Android app utilizes state-of-the-art deep learning technology to detect pn
 1. Clone this repository to your local machine using:
 
 https://github.com/akborhossain/PneumoniaDetectionApp.git
+
 2. Open the project in Android Studio.
 
 3. Build and run the app on your Android device or emulator.
@@ -42,7 +43,7 @@ The underlying deep learning model has been trained on a diverse dataset of X-ra
 
 ## Credits
 
-This app was developed by [Your Name] and is based on a deep learning model created using TensorFlow. The model training data was sourced from [Dataset Source], and the app design was inspired by [Design Inspiration Source].
+This app was developed by [Md. Akbar Hossain] and is based on a deep learning model created using TensorFlow. The model training data was sourced from [Kaggle], and the app design was inspired by [Design Inspiration Source].
 
 ## Disclaimer
 
@@ -50,7 +51,7 @@ Please note that while this app offers valuable assistance in diagnosing pneumon
 
 ---
 
-For any inquiries or contributions, please contact [your@email.com].
+For any inquiries or contributions, please contact [smakbor33@gmail.com].
 
 **Licensed under [License Name].**
 
